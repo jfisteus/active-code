@@ -60,33 +60,40 @@ which contains `div` elements of the class `active-explanation` with explanation
 of the code snippet. For example:
 
 ```html
-            <div class="active-explanation">
-                <div class="explanation-fragment" data-limits="login_manager.login_view = 'auth.login'">
-                    When the <code>Flask-Login</code> extension needs to redirect the user to the login form,
-                    it will redirect it to the path associated to the <code>login</code> controller function
-                    of the <code>auth</code> blueprint.
-                </div>
-                <div class="explanation-fragment" data-limits="@login_manager.user_loader">
-                    The function decorated with <code>user_loader</code>
-                    will be called by the <code>Flask-Login</code> extension
-                    when it needs to load a user object from the database
-                    given its id.
-                </div>
-                <div class="explanation-fragment" data-limits="from . import model">
-                    The <code>model</code> module needs to be imported
-                    because it's accessed in the <code>load_user</code> function.
-                    It's imported here,
-                    and not at the beginning of the file,
-                    to avoid circular imports,
-                    since the <code>model</code> module needs to import the <code>db</code> object
-                    from this module.
-                </div>
-                <div class="explanation-fragment" data-limits="db.session.get(model.User, int(user_id))">
-                    This is a convenient way of retrieving and object from the database
-                    given its class and its primary key.
-                    It's equivalent to composing a query
-                    that looks for a user whose id is equal to <code>user_id</code>,
-                    executing it and getting the first result.
-                </div>
-            </div>
+<div class="active-explanation">
+    <div class="explanation-fragment" data-limits="login_manager.login_view = 'auth.login'">
+        When the <code>Flask-Login</code> extension needs to redirect the user to the login form,
+        it will redirect it to the path associated to the <code>login</code> controller function
+        of the <code>auth</code> blueprint.
+    </div>
+    <div class="explanation-fragment" data-limits="@login_manager.user_loader">
+        The function decorated with <code>user_loader</code>
+        will be called by the <code>Flask-Login</code> extension
+        when it needs to load a user object from the database
+        given its id.
+    </div>
+    <div class="explanation-fragment" data-limits="from . import model">
+        The <code>model</code> module needs to be imported
+        because it's accessed in the <code>load_user</code> function.
+        It's imported here,
+        and not at the beginning of the file,
+        to avoid circular imports,
+        since the <code>model</code> module needs to import the <code>db</code> object
+        from this module.
+    </div>
+    <div class="explanation-fragment" data-limits="db.session.get(model.User, int(user_id))">
+        This is a convenient way of retrieving and object from the database
+        given its class and its primary key.
+        It's equivalent to composing a query
+        that looks for a user whose id is equal to <code>user_id</code>,
+        executing it and getting the first result.
+    </div>
+</div>
 ```
+
+The `data-limits` attribute of each `explanation-fragment` element
+specifies the fragment of the code snippet that will be highlighted when the mouse is over the explanation.
+It can be the full piece of code that is being explained,
+or its beginning and end separated by an ellipsis (`...`).
+For example: `data-limits="db.session...))"`.
+See the [examples directory](examples/) for more examples of how to write code.
