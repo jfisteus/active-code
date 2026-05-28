@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   width="5.9110084mm"
+   height="5.9110084mm"
+   viewBox="0 0 5.9110084 5.9110084"
+   version="1.1"
+   id="svg5"
+   inkscape:version="1.2.2 (b0a8486541, 2022-12-01)"
+   sodipodi:docname="active-code-regular.svg"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <sodipodi:namedview
+     id="namedview7"
+     pagecolor="#ffffff"
+     bordercolor="#000000"
+     borderopacity="0.25"
+     inkscape:showpageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1"
+     inkscape:document-units="mm"
+     showgrid="true"
+     inkscape:zoom="29.276992"
+     inkscape:cx="14.243267"
+     inkscape:cy="13.013632"
+     inkscape:window-width="2560"
+     inkscape:window-height="1367"
+     inkscape:window-x="0"
+     inkscape:window-y="0"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="layer1">
+    <inkscape:grid
+       type="xygrid"
+       id="grid132"
+       originx="-67.607303"
+       originy="-59.509929" />
+  </sodipodi:namedview>
+  <defs
+     id="defs2" />
+  <g
+     inkscape:label="Capa 1"
+     inkscape:groupmode="layer"
+     id="layer1"
+     transform="translate(-67.607301,-59.509927)">
+    <text
+       xml:space="preserve"
+       style="font-size:4.23333px;font-family:sans-serif;-inkscape-font-specification:sans-serif;text-align:center;text-anchor:middle;fill:#b4b4b4;stroke:#b4b4b4;stroke-width:0.264583;stroke-opacity:1;fill-opacity:1"
+       x="70.592438"
+       y="63.968262"
+       id="text238"><tspan
+         sodipodi:role="line"
+         id="tspan236"
+         style="stroke-width:0.264583;stroke:#b4b4b4;stroke-opacity:1;fill:#b4b4b4;fill-opacity:1"
+         x="70.592438"
+         y="63.968262">?</tspan></text>
+    <circle
+       style="fill:none;stroke:#b4b4b4;stroke-width:0.705556;stroke-dasharray:none;stroke-opacity:1"
+       id="path342"
+       cx="70.562805"
+       cy="62.465431"
+       r="2.6027265" />
+  </g>
+</svg>

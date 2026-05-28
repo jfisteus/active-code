@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   width="5.1446137mm"
+   height="5.6834064mm"
+   viewBox="0 0 5.1446138 5.6834064"
+   version="1.1"
+   id="svg5"
+   inkscape:version="1.2.2 (b0a8486541, 2022-12-01)"
+   sodipodi:docname="active-code-copied.svg"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <sodipodi:namedview
+     id="namedview7"
+     pagecolor="#ffffff"
+     bordercolor="#000000"
+     borderopacity="0.25"
+     inkscape:showpageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1"
+     inkscape:document-units="mm"
+     showgrid="true"
+     inkscape:zoom="41.403919"
+     inkscape:cx="14.104945"
+     inkscape:cy="11.17044"
+     inkscape:window-width="1686"
+     inkscape:window-height="1236"
+     inkscape:window-x="0"
+     inkscape:window-y="0"
+     inkscape:window-maximized="0"
+     inkscape:current-layer="layer1">
+    <inkscape:grid
+       type="xygrid"
+       id="grid132"
+       originx="-68.34648"
+       originy="-59.782613" />
+  </sodipodi:namedview>
+  <defs
+     id="defs2" />
+  <g
+     inkscape:label="Capa 1"
+     inkscape:groupmode="layer"
+     id="layer1"
+     transform="translate(-68.346476,-59.78261)">
+    <path
+       id="rect289"
+       style="fill:none;stroke:#d42214;stroke-width:0.706;stroke-linejoin:round;stroke-opacity:1"
+       d="m 69.830429,64.0397 h -0.407973 c -0.400531,0 -0.72298,-0.322449 -0.72298,-0.72298 v -2.45813 c 0,-0.400531 0.322449,-0.72298 0.72298,-0.72298 h 1.807448 c 0.400531,0 0.72298,0.322449 0.72298,0.72298 v 0.662457"
+       sodipodi:nodetypes="cssssssc" />
+    <rect
+       style="fill:none;stroke:#d42214;stroke-width:0.706;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1"
+       id="rect1348"
+       width="3.253408"
+       height="3.9040895"
+       x="69.884682"
+       y="61.208927"
+       ry="0.72297955" />
+  </g>
+</svg>
