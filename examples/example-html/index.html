@@ -1,0 +1,891 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <title>Ejemplos de HTML</title>
+
+    <link rel="stylesheet" href="asignatura.css">
+    <link rel="stylesheet" href="practica.css">
+    <link rel="stylesheet" href="../../active-code/active-code.css">
+    <link rel="stylesheet" href="../../highlight/default.css">
+</head>
+
+<body class="practica">
+    <main>
+        <section class="titulo">
+            <header>
+
+                <h1>Ejemplos de HTML</h1>
+
+            </header>
+        </section>
+
+      <section id="holamundo">
+          <header>
+              <h2>¡Hola Mundo!</h2>
+          </header>
+
+
+<pre class="active-code"><code class="language-html">&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+  &lt;head&gt;
+    &lt;meta charset=&#34;UTF-8&#34;&gt;
+    &lt;title&gt;Mi primera página HTML&lt;/title&gt;
+  &lt;/head&gt;
+  &lt;body&gt;
+    &lt;p&gt;¡Hola Mundo!&lt;/p&gt;
+  &lt;/body&gt;
+&lt;/html&gt;</code></pre>
+
+        <div class="active-explanation">
+    <div class="explanation-fragment" data-limits="<!...html>">
+
+        Define la versión del documento como HTML5.
+
+    </div>
+    <div class="explanation-fragment" data-limits="<meta...>">
+
+        Los caracteres se codifican usando UTF-8,
+        que es actualmente el sistema de codificación de caracteres más común.
+        La cabecera HTTP <code>ContentType</code> también puede usarse para especificar la codificación de caracteres,
+        y tiene prioridad sobre esta etiqueta <code>&lt;meta&gt;</code>.
+        Si no se especifica ninguna codificación, los navegadores asumen <code>ISO-8859-1</code> (Latin-1).
+
+    </div>
+    <div class="explanation-fragment" data-limits="<title.../title>">
+
+        El título del documento, que normalmente se muestra en la pestaña del navegador.
+
+    </div>
+    <div class="explanation-fragment" data-limits="<body>">
+
+        El elemento <code>body</code> define
+        el contenido real del documento que se muestra en la ventana del navegador.
+
+    </div>
+</div>
+      </section>
+
+      <section id="espacios">
+        <header>
+          <h2>Espacios en blanco</h2>
+          </header>
+
+
+<pre class="active-code"><code class="language-html">&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+  &lt;head&gt;
+    &lt;meta charset=&#34;UTF-8&#34;&gt;
+    &lt;title&gt;Espacios en blanco y fines de línea&lt;/title&gt;
+  &lt;/head&gt;
+  &lt;body&gt;
+    &lt;p&gt;
+      Si hay múltiples espacios en  blanco  consecutivos se
+      tratan como   si sólo    hubiera uno.
+      Los caracteres de salto de línea  o tabuladores
+      se tratan como  si      simplemente
+
+      fuesen espacios.
+    &lt;/p&gt;
+  &lt;/body&gt;
+&lt;/html&gt;</code></pre>
+
+
+      </section>
+
+      <section id="texto-preformateado">
+        <header>
+          <h2>Texto preformateado</h2>
+        </header>
+
+
+<pre class="active-code"><code class="language-html">&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+  &lt;head&gt;
+    &lt;meta charset=&#34;UTF-8&#34;&gt;
+    &lt;title&gt;Texto preformateado&lt;/title&gt;
+  &lt;/head&gt;
+  &lt;body&gt;
+&lt;pre&gt;
+public class CircleAreaCalc {
+
+    private BigDecimal pi;
+
+    public CircleAreaCalc(int numDigits) {
+        PiCalc piCalc = new PiCalc(numDigits);
+        pi = piCalc.compute();
+    }
+
+    public BigDecimal area(BigDecimal radius) {
+        BigDecimal area = radius.pow(2);
+        area = area.multiply(pi);
+        return area;
+    }
+}
+&lt;/pre&gt;
+  &lt;/body&gt;
+&lt;/html&gt;</code></pre>
+
+        <div class="active-explanation">
+          <div class="explanation-fragment" data-limits="&lt;pre&gt;...&lt;/pre&gt;">
+
+              El elemento <code>pre</code> se usa para representar texto preformateado,
+              como el código fuente de un programa.
+              Los espacios en blanco, los caracteres de fin de línea y los tabuladores
+               se muestran tal como están en el documento HTML.
+
+          </div>
+        </div>
+      </section>
+
+      <section id="marcado-semantico-1">
+          <header>
+            <h2>Marcado semántico (1)</h2>
+          </header>
+
+
+<pre class="active-code"><code class="language-html">&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+  &lt;head&gt;
+    &lt;meta charset=&#34;UTF-8&#34;&gt;
+    &lt;title&gt;Marcado semántico de texto&lt;/title&gt;
+  &lt;/head&gt;
+  &lt;body&gt;
+    &lt;p&gt;
+      Esta aplicación web le permite &lt;em&gt;comprar&lt;/em&gt;
+      o &lt;em&gt;vender&lt;/em&gt; &lt;strong&gt;únicamente&lt;/strong&gt;
+      objetos de segunda mano.
+    &lt;/p&gt;
+
+    &lt;p&gt;
+      &lt;small&gt;El operador del servicio se reserva
+        el derecho a cancelarlo sin previo aviso.&lt;/small&gt;
+    &lt;/p&gt;
+  &lt;/body&gt;
+&lt;/html&gt;</code></pre>
+
+          <div class="active-explanation">
+            <div class="explanation-fragment" data-limits="&lt;em&gt;...&lt;/em&gt;">
+
+                El navegador enfatiza el contenido del elemento <code>em</code>,
+                normalmente en cursiva.
+
+            </div>
+            <div class="explanation-fragment" data-limits="&lt;strong&gt;...&lt;/strong&gt;">
+
+                El navegador enfatiza fuertemente el contenido del elemento <code>strong</code>,
+                normalmente en negrita.
+
+            </div>
+            <div class="explanation-fragment" data-limits="&lt;small&gt;...&lt;/small&gt;">
+
+                El elemento <code>small</code> se usa para representar comentarios laterales,
+                como avisos legales, que normalmente se muestran en un tamaño de fuente más pequeño.
+
+            </div>
+          </div>
+      </section>
+
+      <section id="imagenes">
+          <header>
+            <h2>Imágenes</h2>
+          </header>
+
+
+<pre class="active-code"><code class="language-html">&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+  &lt;head&gt;
+    &lt;meta charset=&#34;UTF-8&#34;&gt;
+    &lt;title&gt;Imágenes&lt;/title&gt;
+  &lt;/head&gt;
+  &lt;body&gt;
+    &lt;p&gt;
+      &lt;img src=&#34;logo-uc3m.jpg&#34; alt=&#34;Logotipo de UC3M&#34;&gt;
+      &lt;img src=&#34;logo-uc3m.jpg&#34; width=&#34;100&#34;
+           alt=&#34;Logotipo de UC3M esacalado a un ancho de 100 píxeles&#34;&gt;
+      &lt;img src=&#34;logo-uc3m.jpg&#34; width=&#34;100&#34; height=&#34;100&#34;
+           alt=&#34;Logotipo de UC3M escalado a 100x100 píxeles&#34;&gt;
+    &lt;/p&gt;
+  &lt;/body&gt;
+&lt;/html&gt;</code></pre>
+
+          <div class="active-explanation">
+            <div class="explanation-fragment" data-limits='<img...">'>
+
+                Una imagen mostrada con el tamaño original del archivo de imagen.
+
+            </div>
+            <div class="explanation-fragment" data-limits='<img src="logo-uc3m.jpg" width="100"...">'>
+
+                Una imagen mostrada con un ancho de 100 píxeles.
+                La altura se ajusta para mantener la proporción original de la imagen.
+
+            </div>
+            <div class="explanation-fragment" data-limits='<img src="logo-uc3m.jpg" width="100" height="100"...">'>
+
+                Una imagen redimensionada a 100x100 píxeles.
+
+            </div>
+          </div>
+        </section>
+
+        <section id="hipervinculos-1">
+          <header>
+            <h2>Hipervínculos (1)</h2>
+          </header>
+
+
+<pre class="active-code"><code class="language-html">&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+  &lt;head&gt;
+    &lt;meta charset=&#34;UTF-8&#34;&gt;
+    &lt;title&gt;Enlaces&lt;/title&gt;
+  &lt;/head&gt;
+  &lt;body&gt;
+    &lt;p&gt;
+      La &lt;a href=&#34;http://www.uc3m.es/&#34;&gt;Universidad
+      Carlos III de Madrid&lt;/a&gt; fue fundada en 1989.
+    &lt;/p&gt;
+    &lt;p&gt;
+      &lt;a href=&#34;http://www.uc3m.es/&#34;&gt;
+        &lt;img src=&#34;logo-uc3m.jpg&#34;&gt;&lt;/a&gt;
+    &lt;/p&gt;
+    &lt;p&gt;
+      Este &lt;a href=&#34;http://www.uc3m.es/&#34; target=&#34;_blank&#34;&gt;
+        hipervínculo&lt;/a&gt; se abre en otra ventana o pestaña.
+    &lt;/p&gt;
+  &lt;/body&gt;
+&lt;/html&gt;</code></pre>
+
+          <div class="active-explanation">
+            <div class="explanation-fragment" data-limits="Universidad...Madrid">
+
+                Al hacer clic en este texto se activa el hipervínculo al sitio web de la UC3M.
+
+            </div>
+           <div class="explanation-fragment" data-limits='<img...>'>
+
+                Al hacer clic en esta imagen se activa el hipervínculo al sitio web de la UC3M.
+
+            </div>
+            <div class="explanation-fragment" data-limits='target="_blank"'>
+
+                El atributo <code>target="_blank"</code> hace que el hipervínculo se abra en una nueva pestaña o ventana del navegador.
+
+           </div>
+          </div>
+      </section>
+
+      <section id="hipervinculos-2">
+          <header>
+            <h2>Hipervínculos (2)</h2>
+          </header>
+
+
+<pre class="active-code"><code class="language-html">&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+  &lt;head&gt;
+    &lt;meta charset=&#34;UTF-8&#34;&gt;
+    &lt;title&gt;Enlaces&lt;/title&gt;
+  &lt;/head&gt;
+  &lt;body&gt;
+    &lt;p&gt;
+      Este tema se trata en mayor profundidad
+      &lt;a href=&#34;#p3&#34;&gt;posteriormente en este documento&lt;/a&gt;.
+    &lt;/p&gt;
+
+    &lt;p id=&#34;p3&#34;&gt;
+      El tema tiene una complejidad...
+    &lt;/p&gt;
+  &lt;/body&gt;
+&lt;/html&gt;</code></pre>
+
+          <div class="active-explanation">
+            <div class="explanation-fragment" data-limits='<a href="#p3">...</a>'>
+
+                Al hacer clic en este enlace, el usuario es llevado al párrafo con
+                <code>id="p3"</code> en el mismo documento.
+
+            </div>
+            <div class="explanation-fragment" data-limits='<p id="p3">'>
+
+                El atributo <code>id</code> asigna un identificador único a un elemento HTML.
+                Este identificador puede usarse para crear hipervínculos a este elemento.
+
+            </div>
+          </div>
+      </section>
+
+      <section id="listas-ol">
+          <header>
+            <h2>Listas ordenadas</h2>
+          </header>
+
+
+<pre class="active-code"><code class="language-html">&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+  &lt;head&gt;
+    &lt;meta charset=&#34;UTF-8&#34;&gt;
+    &lt;title&gt;Listas ordenadas&lt;/title&gt;
+  &lt;/head&gt;
+  &lt;body&gt;
+    &lt;p&gt;
+      Esto es una lista ordenada (el orden de los
+      elementos de la lista es relevante):
+    &lt;/p&gt;
+    &lt;ol&gt;
+      &lt;li&gt;Primer punto.&lt;/li&gt;
+      &lt;li&gt;Segundo punto.&lt;/li&gt;
+    &lt;/ol&gt;
+
+    &lt;p&gt;
+      Se pueden usar números, letras, etc.:
+    &lt;/p&gt;
+    &lt;ol type=&#34;a&#34;&gt;
+      &lt;li&gt;Primer punto.&lt;/li&gt;
+      &lt;li&gt;Segundo punto.&lt;/li&gt;
+    &lt;/ol&gt;
+  &lt;/body&gt;
+&lt;/html&gt;</code></pre>
+
+          <div class="active-explanation">
+            <div class="explanation-fragment" data-limits='type="a"'>
+
+                Una lista ordenada con elementos etiquetados usando letras minúsculas
+                ("a", "b", "c", etc.).
+
+            </div>
+          </div>
+      </section>
+
+      <section id="listas-ul">
+          <header>
+            <h2>Listas desordenadas</h2>
+          </header>
+
+
+<pre class="active-code"><code class="language-html">&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+  &lt;head&gt;
+    &lt;meta charset=&#34;UTF-8&#34;&gt;
+    &lt;title&gt;Listas no ordenadas&lt;/title&gt;
+  &lt;/head&gt;
+  &lt;body&gt;
+    &lt;p&gt;
+      Esto es una lista no ordenada (el orden de los
+      elementos de la lista
+      &lt;strong&gt;no&lt;/strong&gt; es relevante):
+    &lt;/p&gt;
+    &lt;ul&gt;
+      &lt;li&gt;Primer punto.&lt;/li&gt;
+      &lt;li&gt;Segundo punto.&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/body&gt;
+&lt;/html&gt;</code></pre>
+
+      </section>
+
+      <section id="tablas">
+          <header>
+            <h2>Tablas</h2>
+          </header>
+
+
+<pre class="active-code"><code class="language-html">&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+  &lt;head&gt;
+    &lt;meta charset=&#34;UTF-8&#34;&gt;
+    &lt;title&gt;Tablas&lt;/title&gt;
+  &lt;/head&gt;
+  &lt;body&gt;
+    &lt;table&gt;
+      &lt;thead&gt;
+        &lt;tr&gt;
+          &lt;th&gt;Fecha&lt;/th&gt;
+          &lt;th&gt;Lugar&lt;/th&gt;
+          &lt;th&gt;Precio&lt;/th&gt;
+        &lt;/tr&gt;
+      &lt;/thead&gt;
+      &lt;tbody&gt;
+        &lt;tr&gt;
+          &lt;td&gt;10-09-2014&lt;/td&gt;
+          &lt;td&gt;Madrid&lt;/td&gt;
+          &lt;td&gt;60&lt;/td&gt;
+        &lt;/tr&gt;
+        &lt;tr&gt;
+          &lt;td&gt;12-09-2014&lt;/td&gt;
+          &lt;td&gt;Sevilla&lt;/td&gt;
+          &lt;td&gt;50&lt;/td&gt;
+        &lt;/tr&gt;
+        &lt;tr&gt;
+          &lt;td&gt;13-09-2014&lt;/td&gt;
+          &lt;td&gt;Málaga&lt;/td&gt;
+          &lt;td&gt;50&lt;/td&gt;
+        &lt;/tr&gt;
+      &lt;/tbody&gt;
+      &lt;tfoot&gt;
+        &lt;tr&gt;
+          &lt;td&gt;TOTAL:&lt;/td&gt;
+          &lt;td&gt;&lt;/td&gt;
+          &lt;td&gt;160&lt;/td&gt;
+        &lt;/tr&gt;
+      &lt;/tfoot&gt;
+    &lt;/table&gt;
+  &lt;/body&gt;
+&lt;/html&gt;</code></pre>
+
+          <div class="active-explanation">
+            <div class="explanation-fragment" data-limits="<th>...</th>">
+
+                Los encabezados de tabla se definen usando el elemento <code>th</code>.
+
+            </div>
+            <div class="explanation-fragment" data-limits="<tr>">
+
+                Una fila de tabla se define usando el elemento <code>tr</code>.
+                Contiene varias celdas de tabla.
+
+            </div>
+            <div class="explanation-fragment" data-limits="<td>12-09-2014</td>">
+
+                Las celdas de tabla normales se definen con el elemento <code>td</code>.
+
+            </div>
+          </div>
+      </section>
+
+      <section id="secciones">
+          <header>
+            <h2>Secciones</h2>
+          </header>
+
+
+<pre class="active-code"><code class="language-html">&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+  &lt;head&gt;
+    &lt;meta charset=&#34;UTF-8&#34;&gt;
+    &lt;title&gt;Secciones&lt;/title&gt;
+  &lt;/head&gt;
+  &lt;body&gt;
+    &lt;article&gt;
+      &lt;header&gt;
+        &lt;h2&gt;Apples&lt;/h2&gt;
+        &lt;p&gt;Tasty, delicious fruit!&lt;/p&gt;
+      &lt;/header&gt;
+      &lt;p&gt;The apple is the pomaceous fruit of the apple tree.&lt;/p&gt;
+      &lt;section&gt;
+        &lt;h3&gt;Red Delicious&lt;/h3&gt;
+        &lt;p&gt;These bright red apples are the most common found in many
+          supermarkets.&lt;/p&gt;
+      &lt;/section&gt;
+      &lt;section&gt;
+        &lt;h3&gt;Granny Smith&lt;/h3&gt;
+        &lt;p&gt;These juicy, green apples make a great filling for
+          apple pies.&lt;/p&gt;
+      &lt;/section&gt;
+    &lt;/article&gt;
+  &lt;/body&gt;
+&lt;/html&gt;</code></pre>
+
+          <div class="active-explanation">
+            <div class="explanation-fragment" data-limits="<article>">
+
+                El elemento <code>article</code> representa una composición autónoma
+                en un documento, como una entrada de <em>blog</em>, un artículo de noticias,
+                una publicación en un foro, etc.
+
+            </div>
+            <div class="explanation-fragment" data-limits="<header>">
+
+                El elemento <code>header</code> representa contenido introductorio
+                al comienzo de una sección o artículo.
+
+            </div>
+            <div class="explanation-fragment" data-limits="<h2>Apples</h2>">
+
+                Los elementos <code>h1</code> a <code>h6</code> representan los encabezados de sección.
+                <code>h1</code> es el encabezado de nivel más alto, y <code>h6</code> el de nivel más bajo.
+
+            </div>
+            <div class="explanation-fragment" data-limits="<section>">
+
+                El elemento <code>section</code> representa un agrupamiento temático de contenido,
+                normalmente con un encabezado.
+                Las secciones pueden anidarse dentro de otras secciones.
+
+            </div>
+          </div>
+      </section>
+
+      <section id="formularios">
+          <header>
+            <h2>Formularios</h2>
+          </header>
+
+
+<pre class="active-code"><code class="language-html">&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+  &lt;head&gt;
+    &lt;meta charset=&#34;UTF-8&#34;&gt;
+    &lt;title&gt;Formularios&lt;/title&gt;
+  &lt;/head&gt;
+  &lt;body&gt;
+    &lt;form action=&#34;http://example.com/search&#34;&gt;
+      &lt;label&gt;
+        Texto: &lt;input type=&#34;search&#34; name=&#34;term&#34;&gt;
+      &lt;/label&gt;
+      &lt;input type=&#34;submit&#34; value=&#34;Buscar&#34;&gt;
+    &lt;/form&gt;
+  &lt;/body&gt;
+&lt;/html&gt;</code></pre>
+
+          <div class="active-explanation">
+            <div class="explanation-fragment" data-limits='action="...">'>
+
+                El atributo <code>action</code> especifica la URL
+                a la que se enviarán los datos del formulario cuando se envíe.
+
+            </div>
+            <div class="explanation-fragment" data-limits='<label>'">
+
+                El elemento <code>label</code> representa una descripción textual para un control de formulario.
+
+            </div>
+            <div class="explanation-fragment" data-limits='name="term"'>
+
+                El atributo <code>name</code> del elemento <code>input</code>
+                especifica el nombre del control de formulario.
+                Este nombre se usa como clave al enviar los datos que se introdujeron en este control.
+
+            </div>
+            <div class="explanation-fragment" data-limits='type="search"'>
+
+                El atributo <code>type</code> del elemento <code>input</code>
+                especifica el tipo de control de formulario que se va a crear.
+                En este caso, es un campo de entrada de texto de una sola línea
+                para introducir términos de búsqueda.
+
+            </div>
+            <div class="explanation-fragment" data-limits='<input type="submit"...>'>
+
+                Los elementos <code>input</code> con <code>type="submit"</code>
+                crean un botón que envía los datos del formulario al servidor.
+                Su atributo <code>value</code> especifica el texto que se muestra en el botón.
+
+            </div>
+          </div>
+      </section>
+
+      <section id="formularios-select">
+          <header>
+            <h2>Formularios: menús desplegables</h2>
+          </header>
+
+
+<pre class="active-code"><code class="language-html">&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+  &lt;head&gt;
+    &lt;meta charset=&#34;UTF-8&#34;&gt;
+    &lt;title&gt;Formularios&lt;/title&gt;
+  &lt;/head&gt;
+  &lt;body&gt;
+    &lt;form action=&#34;http://example.com/search&#34;&gt;
+      &lt;p&gt;
+        &lt;label for=&#34;unittype&#34;&gt;Select unit type:&lt;/label&gt;
+        &lt;select id=&#34;unittype&#34; name=&#34;unittype&#34;&gt;
+          &lt;option value=&#34;1&#34;&gt; Miner &lt;/option&gt;
+          &lt;option value=&#34;2&#34;&gt; Puffer &lt;/option&gt;
+          &lt;option value=&#34;3&#34; selected&gt; Snipey &lt;/option&gt;
+          &lt;option value=&#34;4&#34;&gt; Max &lt;/option&gt;
+          &lt;option value=&#34;5&#34;&gt; Firebot &lt;/option&gt;
+        &lt;/select&gt;
+      &lt;/p&gt;
+    &lt;/form&gt;
+  &lt;/body&gt;
+&lt;/html&gt;</code></pre>
+
+          <div class="active-explanation">
+            <div class="explanation-fragment" data-limits='<label for="unittype">...>'>
+
+                El atributo <code>for</code> del elemento <code>label</code>
+                asocia la etiqueta con el control de formulario cuyo <code>id</code> se especifica en este atributo.
+                Es una alternativa a envolver el control de formulario dentro del elemento <code>label</code>.
+
+            </div>
+            <div class="explanation-fragment" data-limits='<select id="unittype" name="unittype">'>
+
+                El elemento <code>select</code> crea una lista desplegable con varias opciones.
+
+            </div>
+            <div class="explanation-fragment" data-limits='value="1"'>
+
+                El atributo <code>value</code> de un elemento <code>option</code>
+                especifica el valor que se enviará al servidor.
+
+            </div>
+            <div class="explanation-fragment" data-limits='Miner'>
+
+                El contenido de un elemento <code>option</code>
+                representa el texto que se muestra al usuario para esa opción
+                en la lista desplegable.
+
+            </div>
+            <div class="explanation-fragment" data-limits='selected'>
+
+                El atributo <code>selected</code> de un elemento <code>option</code>
+                indica que esta opción está seleccionada por defecto
+                cuando el formulario se muestra inicialmente.
+
+            </div>
+          </div>
+      </section>
+
+      <section id="formularios-textarea">
+          <header>
+            <h2>Formularios: áreas de texto</h2>
+          </header>
+
+
+<pre class="active-code"><code class="language-html">&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+  &lt;head&gt;
+    &lt;meta charset=&#34;UTF-8&#34;&gt;
+    &lt;title&gt;Formularios&lt;/title&gt;
+  &lt;/head&gt;
+  &lt;body&gt;
+    &lt;form action=&#34;http://example.com/search&#34;&gt;
+      &lt;p&gt;
+        &lt;textarea name=&#34;mensaje&#34; rows=&#34;5&#34; cols=&#34;80&#34;
+          placeholder=&#34;Escribe tu mensaje aquí.&#34;&gt;&lt;/textarea&gt;
+      &lt;/p&gt;
+      &lt;p&gt;
+        &lt;input type=&#34;submit&#34; value=&#34;Enviar&#34;&gt;
+      &lt;/p&gt;
+    &lt;/form&gt;
+  &lt;/body&gt;
+&lt;/html&gt;</code></pre>
+
+          <div class="active-explanation">
+            <div class="explanation-fragment" data-limits='<textarea'>
+
+                El elemento <code>textarea</code> crea un campo de entrada de texto de varias líneas.
+
+            </div>
+            <div class="explanation-fragment" data-limits='rows="5" cols="80"'>
+
+                Los atributos <code>rows</code> y <code>cols</code> especifican
+                las dimensiones visibles del área de texto en términos de filas y columnas de caracteres.
+
+            </div>
+            <div class="explanation-fragment" data-limits='placeholder="...">'>
+
+                El atributo <code>placeholder</code> especifica una pista corta
+                que describe el valor esperado del área de texto.
+                Esta pista se muestra dentro del área de texto cuando está vacía,
+                y desaparece cuando el usuario comienza a escribir.
+
+            </div>
+          </div>
+      </section>
+
+      <section id="formularios-fieldset">
+          <header>
+            <h2>Formularios con conjuntos de campos</h2>
+          </header>
+
+
+<pre class="active-code"><code class="language-html">&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+  &lt;head&gt;
+    &lt;meta charset=&#34;UTF-8&#34;&gt;
+    &lt;title&gt;Formularios&lt;/title&gt;
+  &lt;/head&gt;
+  &lt;body&gt;
+    &lt;form action=&#34;http://example.com/search&#34;&gt;
+      &lt;fieldset&gt;
+        &lt;legend&gt;Display&lt;/legend&gt;
+        &lt;div&gt;
+          &lt;label&gt;
+            &lt;input type=&#34;radio&#34; name=&#34;c&#34; value=&#34;0&#34; checked&gt;
+            Black on White
+          &lt;/label&gt;
+        &lt;/div&gt;
+        &lt;div&gt;
+          &lt;label&gt;
+            &lt;input type=&#34;radio&#34; name=&#34;c&#34; value=&#34;1&#34;&gt;
+            White on Black
+          &lt;/label&gt;
+        &lt;/div&gt;
+        &lt;div&gt;
+          &lt;label&gt;
+            &lt;input type=&#34;checkbox&#34; name=&#34;g&#34;&gt;
+            Use grayscale
+          &lt;/label&gt;
+        &lt;/div&gt;
+      &lt;/fieldset&gt;
+    &lt;/form&gt;
+  &lt;/body&gt;
+&lt;/html&gt;</code></pre>
+
+          <div class="active-explanation">
+            <div class="explanation-fragment" data-limits="<fieldset>">
+
+                El elemento <code>fieldset</code> se usa para agrupar controles de formulario relacionados
+                y etiquetas dentro de un formulario web.
+                Ayuda a organizar el contenido del formulario y mejorar su accesibilidad.
+
+            </div>
+            <div class="explanation-fragment" data-limits="<legend>Display</legend>">
+
+                El elemento <code>legend</code> proporciona un título para el contenido del <code>fieldset</code>.
+
+            </div>
+            <div class="explanation-fragment" data-limits='type="radio"'>
+
+                Los botones de opción se crean usando elementos <code>input</code>
+                con <code>type="radio"</code>.
+                Los botones de opción con el mismo valor en su atributo <code>name</code>
+                se agrupan juntos, y solo uno de ellos puede ser seleccionado a la vez.
+
+            </div>
+            <div class="explanation-fragment" data-limits="checked">
+
+                El atributo <code>checked</code> de un elemento <code>input</code>
+                indica que este botón de opción o casilla de verificación está seleccionado por defecto
+                cuando el formulario se muestra inicialmente.
+
+            </div>
+            <div class="explanation-fragment" data-limits='type="checkbox"'>
+
+                Las casillas de verificación se crean usando elementos <code>input</code>
+                con <code>type="checkbox"</code>.
+                Se pueden seleccionar varias casillas de verificación al mismo tiempo.
+
+            </div>
+          </div>
+      </section>
+
+      <section id="formularios-sugerencias">
+          <header>
+            <h2>Formularios: sugerencias de entrada</h2>
+          </header>
+
+
+<pre class="active-code"><code class="language-html">&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+  &lt;head&gt;
+    &lt;meta charset=&#34;UTF-8&#34;&gt;
+    &lt;title&gt;Formularios&lt;/title&gt;
+  &lt;/head&gt;
+  &lt;body&gt;
+    &lt;form action=&#34;http://example.com/search&#34;&gt;
+      &lt;label&gt;
+        País &lt;input type=&#34;text&#34; name=&#34;pais&#34; list=&#34;paises&#34;&gt;
+      &lt;/label&gt;
+      &lt;datalist id=&#34;paises&#34;&gt;
+        &lt;option value=&#34;España&#34;&gt;
+        &lt;option value=&#34;Portugal&#34;&gt;
+        &lt;option value=&#34;Andorra&#34;&gt;
+        &lt;option value=&#34;Francia&#34;&gt;
+      &lt;/datalist&gt;
+    &lt;/form&gt;
+  &lt;/body&gt;
+&lt;/html&gt;</code></pre>
+
+          <div class="active-explanation">
+            <div class="explanation-fragment" data-limits='list="..."'>
+
+                El atributo <code>list</code> de un elemento <code>input</code>
+                especifica el <code>id</code> de un elemento <code>datalist</code>
+                que contiene una lista de opciones predefinidas para el campo de entrada.
+                El navegador puede mostrar estas opciones como sugerencias
+                y autocompletar el campo de entrada mientras el usuario escribe.
+
+            </div>
+            <div class="explanation-fragment" data-limits='<datalist id="...">'>
+
+                El elemento <code>datalist</code> contiene un conjunto de elementos <code>option</code>
+                que definen las opciones predefinidas para un campo de entrada asociado.
+
+            </div>
+            </div>
+            <div class="explanation-fragment" data-limits='<option value="...">'>
+
+                El atributo <code>value</code> de un elemento <code>option</code>
+                especifica una opción predefinida que puede ser sugerida al usuario.
+
+            </div>
+          </div>
+      </section>
+
+      <section id="formularios-ficheros">
+          <header>
+            <h2>Formularios con campos de subida de ficheros</h2>
+          </header>
+
+
+<pre class="active-code"><code class="language-html">&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+  &lt;head&gt;
+    &lt;meta charset=&#34;UTF-8&#34;&gt;
+    &lt;title&gt;Formularios&lt;/title&gt;
+  &lt;/head&gt;
+  &lt;body&gt;
+    &lt;form action=&#34;http://example.com/search&#34;&gt;
+      &lt;p&gt;
+        &lt;label&gt;
+          Selecciona una o más fotos:
+          &lt;input type=&#34;file&#34; name=&#34;foto&#34; multiple required&gt;
+        &lt;/label&gt;
+      &lt;/p&gt;
+      &lt;p&gt;
+        &lt;input type=&#34;submit&#34; value=&#34;Enviar&#34;&gt;
+      &lt;/p&gt;
+    &lt;/form&gt;
+  &lt;/body&gt;
+&lt;/html&gt;</code></pre>
+
+          <div class="active-explanation">
+            <div class="explanation-fragment" data-limits='type="file"'>
+
+                El elemento <code>input</code> con <code>type="file"</code>
+                crea un control de carga de archivos que permite al usuario seleccionar archivos desde su dispositivo.
+
+            </div>
+            <div class="explanation-fragment" data-limits='multiple'>
+
+                El atributo <code>multiple</code> permite al usuario seleccionar más de un archivo
+                para un único control de carga de archivos.
+
+            </div>
+            <div class="explanation-fragment" data-limits='required'>
+
+                El atributo <code>required</code> indica que este control de formulario
+                debe ser completado antes de enviar el formulario.
+                El navegador evitará el envío del formulario
+                si no se ha seleccionado ningún archivo.
+
+            </div>
+          </div>
+      </section>
+
+    </main>
+
+
+</body>
+
+<script src="../../highlight/highlight.min.js"></script>
+<script>hljs.highlightAll();</script>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"
+    integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+
+<script>
+    var active_code_location = "../../active-code/"
+</script>
+<script src="../../active-code/active-code.js"></script>
+
+</html>

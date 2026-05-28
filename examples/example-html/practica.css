@@ -1,0 +1,112 @@
+@import url('https://fonts.googleapis.com/css?family=Open+Sans&display=swap');
+
+body.practica  {
+    max-width: 1000px;
+    margin-left: auto;
+    margin-right: auto;
+    font-family: 'Open Sans', sans-serif;
+    font-size: 13pt;
+}
+
+@media screen and (min-width: 40em) {
+    body.practica {
+        text-align: justify;
+    }
+}
+
+body.practica > main > section {
+    padding-top: 1em;
+}
+
+.titulo h1 {
+    font-size: 26pt;
+}
+
+.active-code {
+    border-left: 6px solid rgb(212, 0, 20);
+}
+
+.codigo-alt {
+    border-left: 6px solid rgb(2, 207, 235);
+}
+
+:not(pre) > code {
+    color: rgb(0, 0, 77);
+    font-weight: bold;
+}
+
+/* Sobreescribir esta propiedad de asignatura.css */
+section {
+    padding-top: 1em;
+}
+
+/* Contador de ejercicios */
+body.practica {
+    counter-reset: ejercicios;
+}
+
+section.ejercicio {
+    counter-increment: ejercicios;
+}
+
+section.ejercicio h2::before {
+    content: "Ejercicio " counter(ejercicios);
+    display: block;
+    font-size: smaller;
+    font-weight: normal;
+}
+
+section.ejercicio:lang(en) h2::before {
+    content: "Exercise " counter(ejercicios);
+}
+
+section.ejercicio_proyecto h2::after {
+    content: "proyecto";
+    display: block;
+    width: max-content;
+    font-size: 12pt;
+    background-color: rgb(212, 0, 20);
+    color: white;
+    font-weight: bold;
+    padding: 2px;
+}
+
+.alternative-label {
+    font-size: 14pt;
+    font-weight: bold;
+    margin-bottom: 1em;
+    padding: 2px;
+    display: inline-block;
+    margin-top: 0.5em;
+    border: 2px solid rgb(212, 0, 20);
+    color: rgb(0, 0, 77);
+}
+
+footer {
+    margin-top: 3em;
+    padding-top: 1em;
+    border-top: 3px solid rgb(0, 0, 77);
+}
+
+.footer-info, .header-info {
+    text-align: center;
+    font-weight: bold;
+    font-size: larger;
+    color: rgb(0, 0, 77);
+}
+
+.footer-info a, .header-info a {
+    color: rgb(0, 0, 77);
+}
+
+.enmarcado {
+    border: 1px solid rgb(0, 0, 77);
+    padding: 1em;
+    margin-top: 1em;
+    margin-bottom: 1em;
+}
+
+.imagen-centrada {
+    display: block;
+    margin: auto;
+}
