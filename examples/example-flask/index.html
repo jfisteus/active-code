@@ -1,0 +1,1272 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <title>Laboratory 4: Development of a Web application with Flask (II)</title>
+
+    <link rel="stylesheet" href="asignatura.css">
+    <link rel="stylesheet" href="practica.css">
+    <link rel="stylesheet" href="../../active-code/active-code.css">
+    <link rel="stylesheet" href="../../highlight/default.css">
+</head>
+
+<body class="practica">
+    <main>
+        <section class="titulo">
+            <header>
+
+                <h1>Laboratory 4: Development of a Web application with Flask (II)</h1>
+
+            </header>
+        </section>
+
+
+        <section id="connection" class="ejercicio" id="dbconnection">
+            <header>
+                <h2>Defining the database connection</h2>
+            </header>
+            <p>
+                Instead of directly issuing SQL commands from our code,
+                we'll use an object relational mapper (ORM),
+                which will automatically store and retrieve
+                your Python objects (users, posts, etc.)
+                in the database.
+                In particular,
+                we'll use <a href="https://www.sqlalchemy.org/">SQLAlchemy</a>,
+                a well known library of the Python ecosystem.
+                Although we'll use it here to connect to MySQL or MariaDB
+                servers,
+                it is compatible with any other popular SQL database management system
+                such as Oracle's.
+            </p>
+            <p>
+                First, we will import and configure the
+                <code>Flask-SQLAlchemy</code> module
+                in our application.
+                Go to <code>__init__.py</code> and do the following:
+            </p>
+            <ul>
+                <li>
+                    Before the <code>create_app</code> function,
+                    add the following code:
+                    <pre class="active-code"><code># Things to import at the beginning
+from flask_sqlalchemy import SQLAlchemy
+from sqlalchemy.orm import DeclarativeBase
+
+# Declarations to insert before the create_app function:
+class Base(DeclarativeBase):
+  pass
+
+db = SQLAlchemy(model_class=Base)</code></pre>
+                    <div class="active-explanation">
+                        <div class="explanation-fragment" data-limits="db">
+                            The <code>db</code> object provides the Flask application
+                            with access to the database through the SQLAlchemy library.
+                            For example,
+                            you will access the a SQLAlchemy session with the database
+                            through <code>db.session</code>.
+                        </div>
+                    </div>
+                </li>
+
+                <li>
+                    Inside the <code>create_app</code> function,
+                    configure the database connection,
+                    where you have to change <code>XX</code>
+                    to number at the end of your database user name
+                    and <code>YYYYYYYYY</code> to the password of that database user:
+                    <pre class="active-code"><code class="language-python"># Code to place inside create_app, after the other app.config assignment
+app.config[
+    "SQLALCHEMY_DATABASE_URI"
+] = "mysql+pymysql://26_webapp_XX:YYYYYYYYY@mysql.example.com/26_webapp_XXa"</code></pre>
+
+                    <div class="active-explanation">
+                        <div class="explanation-fragment" data-limits="SQLALCHEMY_DATABASE_URI">
+                            This configuration parameter tells SQLAlchemy
+                            how to connect to the database.
+                            Its value has to be a URI,
+                            usually called the connection string.
+                        </div>
+                        <div class="explanation-fragment" data-limits="mysql+pymysql">
+                            SQLAlchemy will use the <code>PyMySQL</code> library
+                            to connect to the MySQL or MariaDB database server.
+                        </div>
+                        <div class="explanation-fragment" data-limits="26_webapp_XX:YYYYYYYYY">
+                            The user name and password
+                            to connect to the database server.
+                        </div>
+                        <div class="explanation-fragment" data-limits="mysql.example.com">
+                            The host name of the database server.
+                        </div>
+                        <div class="explanation-fragment" data-limits="26_webapp_XXa">
+                            The name of the database to use within that server.
+                        </div>
+                    </div>
+
+                </li>
+                <li>
+                    After that, and before registering the blueprints,
+                    initialize the <code>db</code> object:
+                    <pre class="active-code"><code>db.init_app(app)</code></pre>
+                </li>
+            </ul>
+
+            <p>
+                Notice a few things in the code above:
+            </p>
+            <ul>
+                <li>
+                    We are telling SQLAlchemy
+                    how to connect to the database
+                    with the <code>SQLALCHEMY_DATABASE_URI</code>
+                    configuration parameter.
+                    In particular,
+                    we are defining access for the <code>26_webapp_XX</code> user
+                    with password <code>YYYYYYYYY</code>.
+                    From all the databases
+                    that database management system contains,
+                    we are connecting to the one named <code>26_webapp_XXa</code>.
+                    The <code>mysql+pymysql</code> schema
+                    makes SQLAlchemy use the <code>PyMySQL</code> connector
+                    for MySQL and MariaDB databases.
+                </li>
+                <li>
+                    The <code>db</code> object will be used
+                    to access the database through SQLAlchemy when needed.
+                </li>
+            </ul>
+            <p>
+                Since we cannot test this code yet,
+                proceed to the next exercise.
+            </p>
+        </section>
+
+        <section id="schema" class="ejercicio">
+            <header>
+                <h2>Defining the database schema</h2>
+            </header>
+            <p>
+                We can now define the schema of the database.
+                Replace the <code>model.py</code> module with this new version:
+            </p>
+            <pre class="active-code"><code>import datetime
+from typing import List, Optional
+
+from sqlalchemy import String, DateTime, ForeignKey
+from sqlalchemy.orm import Mapped, mapped_column, relationship
+from sqlalchemy.sql import func
+
+from . import db
+
+
+class User(db.Model):
+    id: Mapped[int] = mapped_column(primary_key=True)
+    email: Mapped[str] = mapped_column(String(128), unique=True)
+    name: Mapped[str] = mapped_column(String(64))
+    password: Mapped[str] = mapped_column(String(256))
+    posts: Mapped[List["Post"]] = relationship(back_populates="user")
+
+
+class Post(db.Model):
+    id: Mapped[int] = mapped_column(primary_key=True)
+    user_id: Mapped[int] = mapped_column(ForeignKey("user.id"))
+    user: Mapped["User"] = relationship(back_populates="posts")
+    text: Mapped[str] = mapped_column(String(512))
+    timestamp: Mapped[datetime.datetime] = mapped_column(
+        DateTime(timezone=True), server_default=func.now()
+    )
+    response_to_id: Mapped[Optional[int]] = mapped_column(ForeignKey("post.id"))
+    response_to: Mapped["Post"] = relationship(
+        back_populates="responses", remote_side=[id]
+    )
+    responses: Mapped[List["Post"]] = relationship(
+        back_populates="response_to", remote_side=[response_to_id]
+    )</code></pre>
+            <div class="active-explanation">
+                <div class="explanation-fragment" data-limits="User(db.Model)">
+                    The <code>User</code> class defines the schema of the table
+                    that will store users in the database.
+                    Extending <code>db.Model</code>
+                    makes SQLAlchemy aware of this class as part of the database model.
+                </div>
+                <div class="explanation-fragment" data-limits="id:...)">
+                    Users in the database will have an integer identifier,
+                    which is the primary key of the table.
+                </div>
+                <div class="explanation-fragment" data-limits="String(128)">
+                    The column for email addresses will store strings
+                    up to 128 characters.
+                </div>
+                <div class="explanation-fragment" data-limits="unique=True">
+                    The email address of each user must be unique in the database.
+                </div>
+                <div class="explanation-fragment" data-limits="posts:...]]">
+                    The <code>posts</code> attribute
+                    of <code>User</code> objects
+                    will contain the list of posts
+                    (objects of the <code>Post</code> class)
+                    authored by that user.
+                    It's a one to many relationship between users and posts
+                    (one user can author many posts).
+                    The users table is the parent side of the relationship.
+                </div>
+                <div class="explanation-fragment" data-limits='relationship(back_populates="user")'>
+                    This attribute does not define a column in the database,
+                    but a relationship between the user and post tables.
+                    The other side of this relationship
+                    is defined in the <code>user</code> attribute of the <code>Post</code> class,
+                    as specified by the <code>back_populates</code> argument.
+                </div>
+                <div class="explanation-fragment" data-limits="Post(db.Model)">
+                    The <code>Post</code> class defines the schema of the table
+                    that will store posts in the database.
+                </div>
+                <div class="explanation-fragment" data-limits="user_id:...))">
+                    Since the posts table is the child side of the relationship
+                    with the users table,
+                    each post will have an integer column
+                    that stores the identifier of the user who authored it.
+                    This column is a foreign key to the <code>id</code> column of the users table.
+                </div>
+                <div class="explanation-fragment" data-limits='user:...back_populates="posts")'>
+                    The <code>user</code> attribute of <code>Post</code> objects
+                    will contain the <code>User</code> object
+                    that authored the post.
+                    It is, normally, more convenient to use this attribute
+                    than the <code>user_id</code> foreign key,
+                    which is just an integer.
+                    It's a many to one relationship between posts and users
+                    (many posts may be authored by one user).
+                    This attribute does not define a column in the database,
+                    but the other side of the relationship defined
+                    by the <code>posts</code> attribute of the <code>User</code> class.
+                </div>
+                <div class="explanation-fragment" data-limits="Mapped[datetime.datetime]">
+                    The <code>timestamp</code> attribute
+                    of <code>Post</code> objects
+                    will contain the date and time when the post was created.
+                    Its data type is <code>datetime.datetime</code>,
+                    from Python's standard library.
+                </div>
+                <div class="explanation-fragment" data-limits="DateTime(timezone=True)">
+                    The column for the <code>timestamp</code> attribute
+                    in the database will store timezone-aware date and time values.
+                </div>
+                <div class="explanation-fragment" data-limits="server_default=func.now()">
+                    If no value is provided for the <code>timestamp</code> attribute
+                    when a post is created,
+                    the column in the database will be set
+                    to the current date and time when the row is inserted into the database.
+                </div>
+                <div class="explanation-fragment" data-limits="response_to_id:...))">
+                    There is a many to one relationship between posts and themselves,
+                    as many posts may be responses to one post.
+                    A foreign key column needs to be declared for that relationship.
+                    The posts table is both the parent of the relationship
+                    (when considered from the point of view of the original post, the <em>one</em> side)
+                    and the child
+                    (when considered from the point of view of response posts, the <em>many</em> side).
+                    It is marked as <code>Optional</code>
+                    (it may take a <code>None</code> value in Python and a <code>NULL</code> value in the database)
+                    because original posts that are not responses to any other post
+                    will have no value for that attribute / column.
+                </div>
+                <div class="explanation-fragment" data-limits='response_to: Mapped["Post"]'>
+                    The <code>response_to</code> attribute of <code>Post</code> objects
+                    will contain the <code>Post</code> object
+                    to which this post is a response to
+                    (or <code>None</code> if it isn't a response).
+                    This attribute does not define a column in the database,
+                    but the child side of the relationship defined
+                    by the <code>responses</code> attribute of the same class.
+                </div>
+                <div class="explanation-fragment" data-limits="remote_side=[id]">
+                    Since the relationship is between posts and themselves,
+                    SQLAlchemy needs some help to understand
+                    which side of the relationship is which.
+                    The <code>remote_side</code> argument
+                    indicates that the <code>id</code> column
+                    is the one that defines the parent side of the relationship.
+                </div>
+                <div class="explanation-fragment" data-limits="responses:...]]">
+                    The <code>responses</code> attribute of <code>Post</code> objects
+                    will contain the list of <code>Post</code> objects
+                    that are responses to this post.
+                    This attribute does not define a column in the database,
+                    but the parent side of the relationship defined
+                    by the <code>response_to</code> attribute of the same class.
+                </div>
+                <div class="explanation-fragment" data-limits="remote_side=[response_to_id]">
+                    Since the relationship is between posts and themselves,
+                    SQLAlchemy needs some help to understand
+                    which side of the relationship is which.
+                    The <code>remote_side</code> argument
+                    indicates that the <code>response_to_id</code> column
+                    is the one that defines the child side of the relationship.
+                </div>
+            </div>
+            <p>
+                <code>User</code> and <code>Post</code>,
+                apart from being normal Python classes,
+                now define also the schema of the database,
+                because they extend SQLAlchemy's <code>Model</code> class.
+                They will be mapped
+                to two tables,
+                named <code>user</code> and <code>post</code>,
+                in the database.
+            </p>
+            <p>
+                The columns and relationships
+                of the two tables are defined
+                by the attributes of the classes.
+                The following syntactic elements
+                are used to define them:
+            </p>
+            <ul>
+                <li>
+                    <code>Mapped[...]</code>:
+                    the data type of the attribute.
+                    There are examples, in the code above,
+                    of integers, strings, dates with time,
+                    objects of the classes <code>User</code> and <code>Post</code>,
+                    and lists of <code>Post</code> objects.
+                    When <code>Optional</code> is used,
+                    the column is allowed take a <code>NULL</code> value.
+                    Otherwise, the column is required to have a non-null value.
+                </li>
+                <li>
+                    <code>mapped_column(...)</code>:
+                    the column definition.
+                    Its arguments are used to specify other characteristics
+                    of the column,
+                    such as the maximum length of a string,
+                    whether the column is unique
+                    ot whether it is a primary or foreign key.
+                </li>
+                <li>
+                    <code>relationship(...)</code>:
+                    the definition of a relationship between tables.
+                    Relationships have two sides
+                    (for example, the <code>posts</code> attribute of <code>User</code>
+                    and the <code>user</code> attribute of <code>Post</code>).
+                    The <code>back_populates</code> argument
+                    refers to the name of the attribute in the other class
+                    that defines the other side of the relationship.
+                    Relationships from one table to itself
+                    are more complex to define,
+                    as you can see in
+                    the <code>response_to</code> and <code>responses</code> attributes:
+                    they also need the <code>remote_side</code> argument,
+                    which refers to the primary or foreign key
+                    that defines the other side of the relationship.
+                </li>
+            </ul>
+            <p>
+                The <code>User</code> class defines a database table
+                with the following characteristics:
+            </p>
+            <ul>
+                <li>Column <code>id</code>: an integer number, the primary key of the table.</li>
+                <li>Column <code>email</code>: a string, which must be unique and contain at most 128 characters.</li>
+                <li>Column <code>name</code>: a string, with 64 characters at most.</li>
+                <li>Column <code>password</code>: a string, with 256 characters at most.</li>
+                <li>
+                    The <code>posts</code> one to many relationship with the table that stores posts
+                    (one user can author many posts).
+                    The <code>posts</code> attribute of <code>User</code> objects
+                    will contain the list of all the posts
+                    (objects of the <code>Post</code> class) from this user.
+                </li>
+            </ul>
+            <p>
+                The <code>Post</code> class defines a database table
+                with the following characteristics:
+            </p>
+            <ul>
+                <li>Column <code>id</code>: an integer number, the primary key of the table.</li>
+                <li>Column <code>user_id</code>: post author, a foreign key to the users table.</li>
+                <li>
+                    The <code>user</code> many to one relationship with the table that stores users.
+                    It is the other side of the <code>posts</code> relationship defined in the <code>User</code> class.
+                    This relationship works through the <code>user_id</code> foreign key defined above.
+                </li>
+                <li>Column <code>text</code>: a string with the text of the post.</li>
+                <li>
+                    Column <code>timestamp</code>: post creation date and time.
+                    When not specified,
+                    it defaults to the date and time when the row is inserted into the database.</li>
+                <li>
+                    Column <code>response_to_id</code>: a foreign key to the <code>posts</code> table itself. It defines to which post this one is a response, if any.
+                    If the post is not a response, the <code>NULL</code> value will be set here,
+                    which is allowed because of the <code>Optional</code> declaration.
+                </li>
+                <li>
+                    The <code>response_to</code> many to one relationship with the same table (many posts may respond to one post).
+                    It defines a <code>response_to</code> attribute for <code>Post</code> objects,
+                    which provides the <code>Post</code> object to which this post is a response to
+                    (or <code>None</code> if it isn't a response).
+                    This relationship works through the <code>response_to_id</code> foreign key defined above.
+                </li>
+                <li>
+                    The <code>responses</code> one to many relationship with the same table (one post may have many responses).
+                    It is the other side of the <code>response_to</code> relationship defined above.
+                    It defines a <code>responses</code> attribute for <code>Post</code> objects,
+                    which provides the list of <code>Post</code> objects that are responses to this post.
+                </li>
+            </ul>
+            <p>
+                The way of creating <code>User</code> and <code>Post</code> objects changes now a little bit.
+                Adjust it in your code at <code>main.py</code>, following the example below:
+            </p>
+            <pre class="active-code"><code class="language-python">user = model.User(email="mary@example.com", name="mary")
+posts = [
+    model.Post(user=user, text="Test post", timestamp=datetime.datetime.now(dateutil.tz.tzlocal())),
+    model.Post(user=user, text="Another post", timestamp=datetime.datetime.now(dateutil.tz.tzlocal())),
+]</code></pre>
+            <p id="table-creation">
+                Finally,
+                in order to make SQLAlchemy automatically create
+                the tables in your database according to the schema you've just defined,
+                run a Python interpreter: type <code>python</code> at your command line
+                (with your virtual environment activated).
+                Within the Python terminal, run the following instructions:
+            </p>
+            <pre class="active-code"><code>from microblog import db, create_app
+app=create_app()
+with app.app_context():
+    db.create_all()</code></pre>
+            <div class="active-explanation">
+                <div class="explanation-fragment" data-limits="db.create_all()">
+                    Create all the database tables defined in the database schema (the model classes).
+                </div>
+            </div>
+            <p>
+                Connect to your database from command line and confirm that those tables
+                have been created and their columns follow the schema:
+            </p>
+            <pre class="active-code"><code>SHOW TABLES;
+DESCRIBE user;
+DESCRIBE post;</code></pre>
+            <p id="manual-creation">
+                Open again a Python terminal and create some example data:
+            </p>
+            <pre class="active-code"><code class="language-python">from microblog import db, create_app, model
+import datetime
+import dateutil
+app = create_app()
+with app.app_context():
+    user = model.User(email="mary@example.com", name="Mary", password="pwd")
+    post = model.Post(user=user, text="First post")
+    post2 = model.Post(user=user, text="Response post", response_to=post)
+    post3 = model.Post(user=user, text="Response post 2", response_to=post)
+    db.session.add(post2)
+    db.session.add(post3)
+    db.session.commit()</code></pre>
+            <div class="active-explanation">
+                <div class="explanation-fragment" data-limits="db.session.add(post2)">
+                    Since <code>post2</code> contains a reference to <code>user</code> and <code>post</code>,
+                    they will be automatically added to the database too.
+                </div>
+                <div class="explanation-fragment" data-limits="db.session.commit()">
+                    Changes to the database are applied when the <code>commit</code> method is called.
+                    Otherwise, they are not applied and will be lost when the session ends.
+                </div>
+            </div>
+
+            <p>
+                The first lines above are just boilerplate to bootstrap a Flask application.
+                The <code>db.session.add</code> function
+                sets objects to be saved in the database
+                (note that it is not necessary to explicitly add <code>user</code>
+                and <code>post</code> because they will be automatically added
+                since <code>post2</code> and <code>post3</code>
+                contain references to them).
+                Finally,
+                <code>db.session.commit()</code> saves the objects into the database.
+            </p>
+            <p>
+                Check that the corresponding rows have been created in the database
+                with the appropriate SQL <code>SELECT</code> queries in your MySQL terminal:
+            </p>
+            <pre class="active-code"><code>SELECT * FROM user;
+SELECT * FROM post;</code></pre>
+            <p>
+                You can also check they are there from the Python interpreter.
+                Open a new interpreter and check that the following commands return
+                what you expect:
+            </p>
+
+            <pre class="active-code"><code class="language-python">from microblog import db, create_app, model
+app = create_app()
+with app.app_context():
+    query = db.select(model.Post)
+    posts = db.session.execute(query).scalars().all()
+    print(posts[0].text)
+    print(posts[1].text)
+    print(posts[1].response_to.text)
+    print(posts[0].user.email)
+    print(len(posts[0].responses))
+    print(posts[0].responses[0].text)</code></pre>
+
+            <p>
+                As you can see, you've just queried the database without using SQL statements,
+                and you can access query results as instances of the classes you've defined.
+            </p>
+        </section>
+
+        <section id="new_users" class="ejercicio">
+            <header>
+                <h2>Registering new users</h2>
+            </header>
+            <p>
+                Although authentication and authorization seem at first glance
+                the same thing,
+                they aren't.
+                Authentication consists in identifying users given the credentials they
+                provided.
+                These credentials frequently consist of an e-mail address
+                and a password,
+                although nowadays it's best practice to include also
+                some other authentication factor
+                or not using passwords at all.
+            </p>
+            <p>
+                Authorization consists in,
+                given a resource and a user that has been previously authenticated,
+                verifying whether that user is granted permission to access the resource.
+                For example, to access the resource that deletes a particular post
+                in a social network,
+                only the user who created the post
+                and certain administrators of the social network
+                should be authorized.
+            </p>
+            <p>
+                The next step to build the application
+                is managing user authentication,
+                so that users can sign up, sign in and sign out.
+                In this exercise we'll begin to work towards that goal
+                by letting users create new accounts.
+            </p>
+            <p>
+                First,
+                create a new template for the registration form
+                and save it as <code>templates/auth/signup.html</code>.
+                You can use the following example code
+                or write your own:
+            </p>
+            <pre class="active-code"><code>{% extends 'base.html' %}
+
+{% block content %}
+    &lt;h2>Sign Up!!!&lt;/h2>
+    &lt;form action="{{ url_for('auth.signup_post') }}" method="post">
+        &lt;div>&lt;label>Email: &lt;input type="email" name="email" required/>&lt;/label>&lt;/div>
+        &lt;div>&lt;label>User name: &lt;input type="text" name="username" required/>&lt;/label>&lt;/div>
+        &lt;div>&lt;label>Password: &lt;input type="password" name="password" required/>&lt;/label>&lt;/div>
+        &lt;div>&lt;label>Repeat password: &lt;input type="password" name="password_repeat" required/>&lt;/label>&lt;/div>
+        &lt;div>&lt;input type="submit" value="Sign Up"/>&lt;/div>
+    &lt;/form>
+{% endblock %}</code></pre>
+            <div class="active-explanation">
+                <div class="explanation-fragment" data-limits="{% extends 'base.html' %}">
+                    Instead of repeating the boilerplate HTML code
+                    in every template,
+                    we extend the <code>base.html</code> template
+                    that already contains that code,
+                    and just define the content
+                    of the <code>content</code> block,
+                    which <code>base.html</code> expects.
+                </div>
+                <div class="explanation-fragment" data-limits="url_for('auth.signup_post')">
+                    The form will be submitted to the path
+                    of the <code>signup</code> function of the <code>auth</code> blueprint,
+                    which we'll define next.
+                </div>
+                <div class="explanation-fragment" data-limits='method="post"'>
+                    The form will be submitted through a <code>POST</code> HTTP request.
+                    This is the appropriate method to use
+                    when the request modifies server state,
+                    as it will do when creating a new user.
+                </div>
+            </div>
+
+            <p>
+                The form will collect from the user four parameters,
+                named <code>email</code>,
+                <code>username</code>,
+                <code>password</code>
+                and <code>password_repeat</code>.
+                When the user clicks on the <em>Sign Up</em> button,
+                a <code>POST</code> HTTP request with those parameters will be sent
+                to the path of the <code>auth.signup_post</code> controller,
+                which we'll program next.
+            </p>
+
+            <p>
+                In order to keep our code modular,
+                we'll create a new blueprint for code related to user authentication.
+                Save the file <code>microblog/auth.py</code> with the following code:
+            </p>
+            <pre class="active-code"><code>from flask import Blueprint, render_template, request, redirect, url_for, flash
+from werkzeug.security import generate_password_hash
+
+from . import db
+from . import model
+
+bp = Blueprint("auth", __name__)
+
+
+@bp.route("/signup")
+def signup():
+    return render_template("auth/signup.html")
+
+
+@bp.route("/signup", methods=["POST"])
+def signup_post():
+    email = request.form.get("email")
+    username = request.form.get("username")
+    password = request.form.get("password")
+    # Check that passwords are equal
+    if password != request.form.get("password_repeat"):
+        return redirect(url_for("auth.signup"))
+    # Check if the email is already at the database
+    query = db.select(model.User).where(model.User.email == email)
+    user = db.session.execute(query).scalar_one_or_none()
+    if user:
+        return redirect(url_for("auth.signup"))
+    password_hash = generate_password_hash(password)
+    new_user = model.User(email=email, name=username, password=password_hash)
+    db.session.add(new_user)
+    db.session.commit()
+    return redirect(url_for("main.index"))</code></pre>
+            <div class="active-explanation">
+                <div class="explanation-fragment" data-limits="Blueprint(...)">
+                    A new <em>blueprint</em> is created
+                    to hold all the code related to user authentication.
+                    The name of the blueprint is <code>auth</code>.
+                </div>
+                <div class="explanation-fragment" data-limits='@bp.route("/signup")'>
+                    The <code>signup</code> function
+                    is registered to process requests to the <code>/signup</code> path
+                    of the application
+                    with a <code>GET</code> method
+                    (the default when no method is specified).
+                </div>
+                <div class="explanation-fragment" data-limits="render_template(...)">
+                    The <code>signup</code> function
+                    just renders the <code>signup.html</code> template
+                    that contains the registration form above.
+                </div>
+                <div class="explanation-fragment" data-limits='@bp.route("/signup", methods=["POST"])'>
+                    The <code>signup_post</code> function
+                    is registered to process requests to the <code>/signup</code> path
+                    of the application
+                    with a <code>POST</code> method.
+                    These are the requests that will be sent
+                    from the form above.
+                </div>
+                <div class="explanation-fragment" data-limits='request.form.get("...")'>
+                    The parameters sent from the form
+                    are accessed through the <code>request.form</code> dictionary-like object.
+                    The <code>get</code> method is used
+                    to get the value of each parameter
+                    given its name.
+                </div>
+                <div class="explanation-fragment" data-limits='return redirect(url_for("auth.signup"))'>
+                    If there is an error in the data provided by the user,
+                    the user is redirected to the registration form again,
+                    i.e. the controller defined by the <code>signup</code> function above.
+                </div>
+                <div class="explanation-fragment" data-limits="model.User">
+                    The query will run on the table that stores users.
+                </div>
+                <div class="explanation-fragment" data-limits="model.User.email == email">
+                    The email column of the users table (<code>model.User.email</code>)
+                    is compared to the email address the has user entered in the form,
+                    which is stored in the <code>email</code> variable.
+                </div>
+                <div class="explanation-fragment" data-limits="execute(query)">
+                    The query is executed
+                    through the <code>db.session.execute</code> method.
+                </div>
+                <div class="explanation-fragment" data-limits="scalar_one_or_none()">
+                    The result of the query
+                    is converted to a single <code>User</code> object
+                    or <code>None</code> if there are no results.
+                    Although it is impossible in this case
+                    because emails have been set as unique in the model,
+                    the method would raise an exception
+                    if there were more than one result.
+                </div>
+                <div class="explanation-fragment" data-limits="generate_password_hash(password)">
+                    Encrypt the password with the <em>scrypt</em> algorithm
+                    before storing it in the database.
+                </div>
+                <div class="explanation-fragment" data-limits='return redirect(url_for("main.index"))'>
+                    Finally,
+                    when everything goes well,
+                    the user is redirected to the main page of the application.
+                </div>
+            </div>
+
+            <p>
+                You are defining two controllers for the <code>/signup</code> path.
+                The first one will answer to <code>GET</code> requests for that path,
+                since that's the default when you don't specify a method.
+                It will just show the sign up form.
+                The second one will answer to <code>POST</code> requests.
+                It will get the parameters sent from the sign up form
+                and actually create the user in the database if everything is correct.
+            </p>
+            <p>
+                In the second controller you can see how to access
+                request parameters that come from a form,
+                by calling the <code>request.form.get</code> method
+                with the name of the parameter as argument.
+                Note that parameter names
+                are those you set as the value
+                of the <code>name</code> attribute of each form control.
+            </p>
+            <p>
+                You can also see how to
+                use SQLAlchemy through the <code>Flask-SQLAlchemy</code> extension
+                to query the database
+                for users given their email address:
+            </p>
+            <ul>
+                <li>
+                    First, a query is built with the <code>db.select</code> function.
+                    The query runs on the table for users
+                    and looks for users whose email is equal to the one provided.
+                </li>
+                <li>
+                    Then, the query is executed with the <code>db.session.execute</code> function.
+                </li>
+                <li>
+                    Finally,
+                    the <code>scalar_one_or_none</code> method
+                    returns the first result of the query
+                    as a <code>User</code> object,
+                    or <code>None</code> if there are no results.
+                    Although it is impossible in this case
+                    because emails have been set as unique in the model,
+                    the method would raise an exception
+                    if there were more than one result.
+                </li>
+            </ul>
+            <p>
+                When everything goes well,
+                a new <code>User</code> object is created and stored
+                into the database:
+            </p>
+            <ul>
+                <li>
+                    New objects to be stored into the database
+                    are created with their constructor
+                    (in this case, the constructor for the <code>User</code> class).
+                </li>
+                <li>
+                    Then,
+                    they are set to be added to the database
+                    with the <code>db.session.add</code> method.
+                </li>
+                <li>
+                    Finally,
+                    the <code>db.session.commit</code> method
+                    is called to actually store the new object
+                    into the database.
+                    In general,
+                    changes to the database are not applied
+                    until this method is called.
+                </li>
+            </ul>
+            <p>
+                The user is then redirected (HTTP redirection response)
+                to the index page through the
+                <code>return redirect(...)</code> statement.
+                If the email already exists in the database
+                or passwords are different,
+                no user is created
+                and the user is redirected again to the same form.
+            </p>
+            <p>
+                <a href="https://datatracker.ietf.org/doc/html/rfc7914.html">The <em>scrypt</em> algorithm</a>
+                is used to encrypt user passwords
+                in the database,
+                so that they are hard to crack
+                even if the attackers get a copy of the database.
+                This algorithm is included with the Flask framework.
+                The encrypted password is created with the <code>generate_password_hash</code> function
+                and stored in the database.
+            </p>
+
+            <p>
+                The <code>auth</code> <em>blueprint</em>
+                you have just created in this exercise
+                needs to be registered in the Flask application.
+                To do so,
+                you must edit the <code>__init__.py</code> module
+                in the same way you have already done to import the main <em>blueprint</em>
+                (that is, import the <code>auth</code> module and register it).
+            </p>
+
+            <p>
+                In order to check your code,
+                run the Flask server and request the <code>/signup</code> path.
+            </p>
+            <p>
+                Fill in the registration form from your browser
+                and check in the database that it worked.
+                Try also to create an account for an already registered email
+                and to create an account with the password and password repetition fields
+                being different.
+            </p>
+        </section>
+
+        <section id="feedback" class="ejercicio">
+            <header>
+                <h2>Providing feedback in case of user errors</h2>
+            </header>
+            <p>
+                When user registration fails
+                no feedback is sent to the user,
+                who won't know what went wrong.
+                Flask provides the <em>flash</em> mechanism
+                to pass posts from the context of one request
+                to the next request from the same user session.
+                You can <em>flash</em> the post at the controller
+                and then show <em>flashed</em> posts at the form template.
+            </p>
+            <p>
+                In order to flash the post at the controller,
+                add the following three calls to the <code>flash</code> function
+                at <code>auth.py</code>:
+            </p>
+            <pre class="active-code"><code>(...)
+if password != request.form.get("password_repeat"):
+    flash("Sorry, passwords are different")
+    return redirect(url_for("auth.signup"))
+(...)
+if user:
+    flash("Sorry, the email you provided is already registered")
+    return redirect(url_for("auth.signup"))
+(...)
+flash("You've successfully signed up!")
+return redirect(url_for("main.index"))</code></pre>
+            <div class="active-explanation">
+                <div class="explanation-fragment" data-limits='flash("Sorry, passwords are different")'>
+                    Flash messages are stored until they are consumed
+                    in a future request from the same user session.
+                </div>
+            </div>
+
+            <p>
+                In order to show flashed messages,
+                add the following code to the proper place at your sign up form template:
+            </p>
+            <pre class="active-code"><code class="language-html">{% with messages = get_flashed_messages() %}
+    {% for message in messages %}
+        &lt;div class="notification">{{ message }}&lt;/div>
+    {% endfor %}
+{% endwith %}</code></pre>
+
+            <div class="active-explanation">
+                <div class="explanation-fragment" data-limits='{% with messages = get_flashed_messages() %}'>
+                    The <code>get_flashed_messages</code> function
+                    retrieves the list of flashed messages from the current user session
+                    that haven't been consumed yet.
+                </div>
+            </div>
+
+            <p>
+                Try this new version of the application
+                and check that now you see the feedback
+                in case of registration errors.
+            </p>
+        </section>
+        <section id="authentication1" class="ejercicio">
+            <header>
+                <h2>User authentication (I)</h2>
+            </header>
+            <p>
+                Create a template for the login form
+                at <code>templates/auth/login.html</code>,
+                as well as a controller function called <code>login</code>
+                at <code>auth.py</code>
+                for the path <code>/login</code>,
+                which just tells Flask to render the form.
+                The form has to ask for an email and a password,
+                and include a link to the sign up form
+                so that new users can create an account.
+                Data has to be submitted to the server
+                through a <code>POST</code> request to the <code>/login</code> path
+                (use <code>url_for</code> like we did in <code>signup.html</code>).
+            </p>
+            <p>
+                Modify also the sign up controller so that it redirects
+                to this form after a new user account has been successfully registered,
+                instead of the main page.
+                This way,
+                new users can sign in once they've signed up.
+            </p>
+            <p>
+                Create the controller at <code>auth.py</code> that will receive
+                the email and password and check them.
+                The relevant pieces of code to check authentication
+                are shown below,
+                where you will need to fill in the missing code:
+            </p>
+            <pre class="active-code"><code class="language-python"># Imports:
+from werkzeug.security import check_password_hash
+
+# Code to check passwords:
+email = ...
+password = ...
+# Get the user with that email from the database:
+...
+user = ...
+if user and check_password_hash(user.password, password):
+    # The user exists and the password is correct
+    # Redirect to the main page
+    ...
+else:
+    # Wrong email and/or password
+    # Flash a message and redirect to the login form
+    ...</code></pre>
+            <div class="active-explanation">
+                <div class="explanation-fragment" data-limits="check_password_hash(...)">
+                    The <code>check_password_hash</code> function
+                    encrypts the password received from the form (the <code>password</code> variable)
+                    with <code>scrypt</code>
+                    and checks whether that encrypted value
+                    is equal to the encrypted password stored in the database
+                    (<code>user.password</code>).
+                    If returns <code>True</code> if they are equal,
+                    and <code>False</code> otherwise.
+                </div>
+            </div>
+            <p>
+                Notice that,
+                since the hash values of the passwords are stored in the database
+                instead of the passwords themselves,
+                password comparison needs to be done
+                through the <code>check_password_hash</code> function.
+                Internally, it will compute the encrypted value of the password received from the form
+                and compare it to the one stored in the user object
+                that was received from the database.
+            </p>
+            <p>
+                Complete this exercise
+                by modifying the login form template in order to show flashed messages,
+                and check the login system for correct and incorrect emails and passwords.
+            </p>
+        </section>
+
+        <section id="authentication2" class="ejercicio">
+            <header>
+                <h2>User authentication (II)</h2>
+            </header>
+            <p>
+                In the previous exercise we created the code to authenticate users,
+                but we aren't remembering who has logged in yet.
+                Instead of programming that part manually,
+                we'll use
+                the <a href="https://flask-login.readthedocs.io/en/latest/"><code>Flask-Login</code></a>
+                package, which automates session tracking for authenticated users,
+                as well as access control to resources that need an authenticated user.
+                You have already installed it in the previous lab.
+            </p>
+            <p>
+                First, activate the <code>Flask-Login</code> module at <code>__init__.py</code>.
+                Import the module and then,
+                somewhere within the <code>create_app</code> function,
+                before registering blueprints,
+                insert the following code:
+            </p>
+            <pre class="active-code"><code class="language-python"># With the other imports at the beginning:
+from flask_login import LoginManager
+(...)
+
+# Inside create_app:
+login_manager = LoginManager()
+login_manager.login_view = 'auth.login'
+login_manager.init_app(app)
+from . import model
+
+@login_manager.user_loader
+def load_user(user_id):
+    return db.session.get(model.User, int(user_id))</code></pre>
+            <div class="active-explanation">
+                <div class="explanation-fragment" data-limits="login_manager.login_view = 'auth.login'">
+                    When the <code>Flask-Login</code> extension needs to redirect the user to the login form,
+                    it will redirect it to the path associated to the <code>login</code> controller function
+                    of the <code>auth</code> blueprint.
+                </div>
+                <div class="explanation-fragment" data-limits="@login_manager.user_loader">
+                    The function decorated with <code>user_loader</code>
+                    will be called by the <code>Flask-Login</code> extension
+                    when it needs to load a user object from the database
+                    given its id.
+                </div>
+                <div class="explanation-fragment" data-limits="from . import model">
+                    The <code>model</code> module needs to be imported
+                    because it's accessed in the <code>load_user</code> function.
+                    It's imported here,
+                    and not at the beginning of the file,
+                    to avoid circular imports,
+                    since the <code>model</code> module needs to import the <code>db</code> object
+                    from this module.
+                </div>
+                <div class="explanation-fragment" data-limits="db.session.get(model.User, int(user_id))">
+                    This is a convenient way of retrieving and object from the database
+                    given its class and its primary key.
+                    It's equivalent to composing a query
+                    that looks for a user whose id is equal to <code>user_id</code>,
+                    executing it and getting the first result.
+                </div>
+            </div>
+
+            <p>
+                That piece of code initializes the <code>Flask-Login</code> module,
+                tells it that the view with the authentication form
+                is <code>auth.login</code> and,
+                finally,
+                tells it how to load a user object from the database
+                given its id.
+            </p>
+
+            <p>
+                Notice that the <code>db.session.get</code> method is used
+                as a shortcut to retrieve an object from the database
+                given its class and its id,
+                without having to compose a query like the one
+                in exercises 4 and 6.
+            </p>
+
+            <p>
+                In order to be compatible with the <code>Flask-Login</code> module,
+                user objects need to inherit also from the class
+                <code>flask_login.UserMixin</code>.
+                Do this change at <code>model.py</code>:
+            </p>
+            <pre class="active-code"><code class="language-python"># With the other imports at the beginning
+import flask_login
+(...)
+
+class User(flask_login.UserMixin, db.Model):
+    (...)</code></pre>
+            <div class="active-explanation">
+                <div class="explanation-fragment" data-limits="flask_login.UserMixin">
+                    The class extending <code>UserMixin</code>
+                    is the one that will be used by the <code>Flask-Login</code> extension
+                    to represent users.
+                </div>
+            </div>
+
+            <p>
+                In order to remember the user,
+                go to the function at <code>auth.py</code> that authenticates users
+                and make it communicate the identity of the user to
+                the <code>Flask-Login</code> module:
+            </p>
+            <pre class="active-code"><code class="language-python"># With the other imports at the beginning
+import flask_login
+(...)
+
+if user and check_password_hash(user.password, password):
+    # The user exists and the password is correct
+    flask_login.login_user(user)
+    return redirect(url_for("main.index"))
+(...)</code></pre>
+            <div class="active-explanation">
+                <div class="explanation-fragment" data-limits="flask_login.login_user(user)">
+                    The <code>login_user</code> function
+                    tells the <code>Flask-Login</code> extension
+                    that the user has been authenticated.
+                    From now on,
+                    the user will be remembered in future requests
+                    from the same user session.
+                </div>
+            </div>
+            <p>
+                You can get the identity of the authenticated user
+                at templates through the <code>current_user</code> variable.
+                It will contain its data if a user
+                is currently authenticated:
+            </p>
+            <pre class="active-code"><code class="language-html">{% if current_user.is_authenticated: %}
+    &lt;div>User: {{current_user.name}}&lt;/div>
+{% endif %}</code></pre>
+            <div class="active-explanation">
+                <div class="explanation-fragment" data-limits="current_user.is_authenticated">
+                    The <code>current_user</code> variable
+                    is automatically made available to templates
+                    by the <code>Flask-Login</code> extension.
+                    Its value is the user object
+                    of the currently authenticated user,
+                    or an anonymous user object
+                    if no user is authenticated.
+                    Its <code>is_authenticated</code> attribute
+                    is <code>True</code> if a user is authenticated,
+                    and <code>False</code> otherwise.
+                </div>
+            <p>
+                At controllers,
+                import <code>current_user</code>
+                from <code>flask_login</code>
+                and the <code>current_user</code> variable
+                will also be available with the data
+                of the currently authenticated user.
+            </p>
+            <p>
+                Modify <code>base.html</code>
+                so that every page shows the name of the current user,
+                if any.
+            </p>
+        </section>
+        <section id="logout" class="ejercicio">
+            <header>
+                <h2>Logging out</h2>
+            </header>
+            <p>
+                Add a new controller to <code>auth.py</code>
+                for logging out the current user.
+                It must tell the <code>Flask-Login</code> module to log out the user
+                with the call <code>flask_login.logout_user()</code>
+                and respond with an HTTP redirection to the login page.
+            </p>
+            <p>
+                Add a link for logging out at <code>base.html</code>,
+                so that users can log out from every view.
+                It should appear only when a user is currently logged in.
+            </p>
+            <p>
+                Test now the login and logout functions
+                in order to check that they work properly.
+            </p>
+        </section>
+
+        <section id="access_control" class="ejercicio">
+            <header>
+                <h2>Access control</h2>
+            </header>
+            <p>
+                Finally,
+                we want to control access to the application
+                so that only authenticated users can
+                access the main view, user profile view, post view
+                and logout controller.
+                Go to those controller functions and add
+                the <code>@flask_login.login_required</code>
+                annotation immediately before their declaration
+                (remember to import <code>flask_login</code> where needed):
+            </p>
+            <pre class="active-code"><code class="language-python">@bp.route("/")
+@flask_login.login_required
+def index():
+    (...)</code></pre>
+            <div class="active-explanation">
+                <div class="explanation-fragment" data-limits="@flask_login.login_required">
+                    The <code>login_required</code> decorator
+                    makes the controller accessible only to authenticated users.
+                    If unauthenticated users try to access it,
+                    the <code>Flask-Login</code> extension
+                    will redirect them the login form.
+                </div>
+            </div>
+            <p>
+                Check that now that,
+                when you access any of these resources from your browser
+                without being authenticated,
+                you are redirected to the login form.
+            </p>
+        </section>
+
+        <section id="appendix1">
+            <header>
+                <h2>Appendix 1: setting up a SQLite database to work in your own computer</h2>
+            </header>
+            <p class="remark">
+                <strong>Note: You are free to skip this section</strong>.
+                This section isn't an official part of this lab.
+                It's only provided for the convenience of students
+                who want to work in their own computers locally.
+            </p>
+            <p class="remark">
+                <strong>Warning:</strong>
+                Using a SQLite database makes it simple to work
+                on these labs and the project
+                locally in your own computer.
+                However,
+                you should be familiar with how to work
+                with the MariaDB databases we provide,
+                since it will be mandatory for your project submission
+                to work with those databases.
+                Moreover, SQLite databases aren't,
+                in many cases,
+                suitable for production web application environments.
+            </p>
+            <p>
+                If for some reason you want to work in your own computer,
+                you can use <a href="https://www.sqlite.org/">a SQLite database</a>
+                instead of the MariaDB databases we provide.
+                SQLite is a database management system that stores the database
+                in a single file in your computer.
+                You do not need to download or install anything else to use it,
+                since it is included in Python's standard library.
+            </p>
+            <p>
+                In order to use SQLite,
+                you need to change the database URI at <code>__init__.py</code>
+                to the following:
+            </p>
+            <pre class="active-code"><code>app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///microblog.db"</code></pre>
+            <div class="active-explanation">
+                <div class="explanation-fragment" data-limits='"sqlite:///microblog.db"'>
+                    This URI tells SQLAlchemy to use SQLite
+                    and to store the database in a file named <code>microblog.db</code>
+                    inside the <code>instance</code> subdirectory of your application.
+                    The <code>instance</code> subdirectory is created automatically by Flask
+                    when you run the application for the first time.
+                </div>
+            </div>
+            <p>
+                The database will be stored into the local file <code>microblog.db</code>,
+                inside the subdirectory called <code>instance</code> that Flask will create.
+            </p>
+            <p>
+                Note that, after changing the database URI,
+                you'll need to create the tables inside this new database
+                with the <code>db.create_all()</code> method call,
+                as explained in <a href="#table-creation">this piece of code</a>.
+            </p>
+            <p>
+                The <code>mysql</code> client program won't work with SQLite but,
+                if you want to explore the contents of your database,
+                you can use specific software for SQLite
+                such as <a href="https://sqlitebrowser.org/">DB Browser for SQLite</a>.
+                You just need to open the file <code>instance/microblog.db</code>
+                with that program.
+                You can also use the <code>sqlite3</code> command line client
+                to query and manage a SQLite database from a terminal.
+            </p>
+        </section>
+    </main>
+
+
+</body>
+
+<script src="../../highlight/highlight.min.js"></script>
+<script>hljs.highlightAll();</script>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"
+    integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+
+<script>
+    var active_code_location = "../../active-code/"
+</script>
+<script src="../../active-code/active-code.js"></script>
+
+</html>

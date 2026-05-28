@@ -1,0 +1,323 @@
+@import url('https://fonts.googleapis.com/css?family=Open+Sans&display=swap');
+
+body {
+    padding-left: 1em;
+    padding-right: 1em;
+    padding-bottom: 1em;
+    --bs-heading-color: rgb(0, 0, 77);
+}
+
+body#principal, body#main {
+    font-family: 'Open Sans', sans-serif;
+    font-size: 13pt;
+}
+
+header>.navbar {
+    background-color: rgb(0, 0, 77);
+}
+
+#headerNavbar a.nav-link {
+    color: azure;
+}
+
+h1,
+h2,
+h3,
+h4 {
+    color: rgb(0, 0, 77);
+}
+
+h2 {
+    border-left: 6px solid rgb(0, 0, 77);
+    padding-left: 0.2em;
+    padding-bottom: 0.5em;
+}
+
+.titulo {
+    text-align: center;
+}
+
+.resaltar, .titulacion, strong {
+    color: rgb(0, 0, 77);
+    font-weight: bold;
+}
+
+.titulacion {
+    font-size: larger;
+}
+
+.titulacion > div {
+    margin-top: 0.8em;
+    margin-bottom: 0.8em;
+}
+
+.lista {
+    margin-top: 1.5em;
+    margin-bottom: 1.5em;
+}
+
+ul.lista {
+    list-style: none;
+}
+
+ol.lista {
+    list-style: decimal inside;
+}
+
+
+ol.lista li::marker {
+    color: rgb(0, 0, 77);
+    font-weight: bold;
+    font-size: 1.2em;
+}
+
+.lista > li {
+    border-left: 6px solid rgb(212, 0, 20);
+    padding-left: 0.2em;
+    padding-bottom: 1em;
+}
+
+.lista > li:last-child {
+    padding-bottom: 0.2em;
+}
+
+
+.lista-separacion-extra > li {
+    padding-bottom: 2em;
+}
+
+.lista-separacion-extra > li:last-child {
+    padding-bottom: 0.2em;
+}
+
+section {
+    padding-top: 60px;
+}
+
+
+#courseTitle {
+    padding-top: 0px;
+}
+
+
+.clase {
+    background-color: antiquewhite;
+    margin-top: 1em;
+    border-left: 6px solid rgb(212, 0, 20);
+}
+
+.clase-esta-semana {
+    background-color: rgb(249, 205, 145);
+}
+
+.clase:has(.clase-contenido > .clase-semana):not(:first-child) {
+    margin-top: 3em;
+}
+
+.clase-cancelada {
+    background-color: rgba(250, 235, 215, 0.4);
+    border-left: 6px solid rgba(250, 235, 215, 0.4);
+}
+
+.clase-dia {
+    font-size: 28pt;
+    font-weight: bold;
+    text-align: center;
+}
+
+.clase-mes {
+    font-size: 12pt;
+    text-align: center;
+    font-weight: bold;
+}
+
+.clase-hora {
+    font-size: 12pt;
+    font-weight: bold;
+    text-align: center;
+}
+
+.clase-fecha-fila {
+    font-size: 12pt;
+}
+
+.clase-fecha-fecha {
+    font-weight: bold;
+}
+
+.clase-aula {
+    font-size: 12pt;
+    margin-bottom: 1em;
+    padding: 2px;
+    display: inline-block;
+    margin-top: 3px;
+    border: 1px solid rgb(0, 0, 77);
+    color: rgb(0, 0, 77);
+}
+
+.clase-semana {
+    font-size: 12pt;
+    font-weight: bold;
+    margin-bottom: 1em;
+    padding: 2px;
+    display: inline-block;
+    margin-top: 3px;
+    background-color: rgb(0, 0, 77);
+    color: white;
+
+}
+
+.clase-examen {
+    font-size: 12pt;
+    font-weight: bold;
+    margin-bottom: 0.5em;
+    padding: 2px;
+    display: inline-block;
+    margin-top: 3px;
+    background-color: rgb(212, 0, 20);
+    color: white;
+}
+
+.clase-aviso {
+    font-size: 12pt;
+    font-weight: bold;
+    margin-bottom: 0.5em;
+    padding-left: 2px;
+    padding-right: 2px;
+    display: inline-block;
+    margin-top: 3px;
+    border: 2px solid rgb(0, 0, 77);
+    color: rgb(0, 0, 77);
+}
+
+.presencial {
+    background-color: rgb(0, 0, 77);
+    color: white;
+}
+
+.clase-titulo {
+    font-size: larger;
+    font-weight: bold;
+}
+
+.clase-anotacion {
+    font-style: italic;
+}
+
+.clase-aclaracion {
+    font-weight: bold;
+}
+
+.etiqueta {
+    margin-top: 10px;
+    background-color: rgb(212, 0, 20);
+    color: white;
+    font-weight: bold;
+    padding: 2px;
+}
+
+.evaluacion-bloque {
+    background-color: antiquewhite;
+    margin-top: 1em;
+    border-left: 6px solid rgb(212, 0, 20);
+    padding-bottom: 0.5em;
+}
+
+.evaluacion-peso {
+    font-size: 20pt;
+    font-weight: bold;
+    text-align: right;
+}
+
+.evaluacion-titulo {
+    font-size: larger;
+    font-weight: bold;
+}
+
+.evaluacion-aclaracion {
+    font-weight: bold;
+}
+
+.evaluacion-temas {
+    font-style: italic;
+}
+
+.profesor {
+    background-color: antiquewhite;
+    margin-top: 1em;
+    padding-top: 1ex;
+    padding-bottom: 1ex;
+    border-left: 6px solid rgb(212, 0, 20);
+}
+
+.profesor-tutorias {
+    font-weight: bold;
+}
+
+.profesor-nombre {
+    font-size: larger;
+    font-weight: bold;
+}
+
+.profesor-despacho .profesor-url .profesor-nota{
+    font-size: 12pt;
+}
+
+.toc {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    text-align: center;
+}
+
+.remark {
+    border-left: 6px solid rgb(212, 0, 20);
+    padding: 0.5em;
+    font-style: italic;
+    background-color: rgb(205, 216, 224);
+}
+
+.logo {
+    max-width: 100%;
+}
+
+.materiales-avance {
+    color: rgb(143, 139, 139);
+}
+
+/* .materiales-extra {
+    display: none;
+} */
+
+.materiales-lista {
+    background-color: antiquewhite;
+    margin-top: 1em;
+    border-left: 6px solid rgb(212, 0, 20);
+}
+
+.materiales-titulo {
+    font-size: larger;
+    font-weight: bold;
+}
+
+#thisweek, #estasemana, #thisweek-nav {
+    display: none;
+}
+
+.todo {
+    background-color: antiquewhite;
+    color: red;
+    font-weight: bold;
+}
+
+.material-symbols-outlined {
+    font-size: 16pt;
+    vertical-align: text-bottom;
+}
+
+
+@media (max-width: 400px) {
+    .toc {
+       display: none;
+    }
+ }
